@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en" class="dark scroll-smooth scroll-pt-[100px]">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sachin Kanojia - UI/UX Designer & Front-End Developer</title>
+    <meta name="description" content="Portfolio of Sachin Kanojia, UI/UX Designer & Front-End Developer with 7+ years of experience." />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+    <style>
+      /* Loader Styles - UI/UX Designer Theme */
+      #loader {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: #0a0a0a;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 24px;
+        transition: opacity 0.6s ease, visibility 0.6s ease;
+      }
+      #loader.hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+
+      /* Animated "SK" Monogram - like a loading design tool cursor */
+      .loader-brand {
+        position: relative;
+        width: 80px;
+        height: 80px;
+      }
+      .loader-brand::before,
+      .loader-brand::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border: 3px solid transparent;
+        border-radius: 50%;
+        animation: rotate 2s linear infinite;
+      }
+      .loader-brand::before {
+        border-top-color: #FFA800;
+        border-right-color: #FFA800;
+      }
+      .loader-brand::after {
+        animation-direction: reverse;
+        animation-duration: 1.5s;
+        border-bottom-color: #FFA800;
+        border-left-color: #FFA800;
+      }
+      .loader-brand-inner {
+        position: absolute;
+        inset: 12px;
+        border: 2px solid transparent;
+        border-radius: 50%;
+        animation: rotate 1.2s linear infinite reverse;
+      }
+      .loader-brand-inner::before,
+      .loader-brand-inner::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border: 2px solid transparent;
+        border-radius: 50%;
+      }
+      .loader-brand-inner::before {
+        border-top-color: #FFA800;
+        opacity: 0.6;
+      }
+      .loader-brand-inner::after {
+        border-bottom-color: #FFA800;
+        opacity: 0.6;
+        animation: rotate 1.8s linear infinite;
+      }
+      .loader-brand-text {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 800;
+        font-size: 20px;
+        color: #FFA800;
+        letter-spacing: -1px;
+      }
+
+      /* Progress bar - like a design tool loading */
+      .loader-progress {
+        width: 200px;
+        max-width: 80vw;
+        height: 3px;
+        background: #1a1a1a;
+        border-radius: 9999px;
+        overflow: hidden;
+        position: relative;
+      }
+      .loader-progress-bar {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #FFA800, #FFC850, #FFA800);
+        background-size: 200% 100%;
+        border-radius: 9999px;
+        animation: progressFill 2.5s ease-in-out infinite, shimmer 1.5s linear infinite;
+        transform-origin: left center;
+      }
+
+      /* Loading text with typing effect */
+      .loader-text {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 14px;
+        font-weight: 400;
+        color: #6b6b6b;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .loader-text span {
+        display: inline-block;
+        animation: typingDot 1.4s ease-in-out infinite both;
+      }
+      .loader-text span:nth-child(2) { animation-delay: 0.2s; }
+      .loader-text span:nth-child(3) { animation-delay: 0.4s; }
+
+      /* Floating design elements - subtle UI/UX touches */
+      .loader-decor {
+        position: absolute;
+        pointer-events: none;
+      }
+      .loader-decor-1 {
+        top: 20%;
+        left: 15%;
+        width: 60px;
+        height: 60px;
+        border: 1px solid #FFA800;
+        border-radius: 12px;
+        opacity: 0.1;
+        animation: float 4s ease-in-out infinite;
+      }
+      .loader-decor-2 {
+        bottom: 20%;
+        right: 15%;
+        width: 40px;
+        height: 40px;
+        border: 1px solid #FFA800;
+        border-radius: 50%;
+        opacity: 0.08;
+        animation: float 5s ease-in-out infinite reverse;
+      }
+      .loader-decor-3 {
+        top: 50%;
+        left: 5%;
+        width: 20px;
+        height: 20px;
+        background: #FFA800;
+        border-radius: 4px;
+        opacity: 0.15;
+        animation: float 3.5s ease-in-out infinite;
+        transform: rotate(45deg);
+      }
+
+      @keyframes rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      @keyframes progressFill {
+        0% { width: 0%; transform: translateX(0); }
+        50% { width: 100%; transform: translateX(0); }
+        100% { width: 0%; transform: translateX(100%); }
+      }
+      @keyframes shimmer {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+      }
+      @keyframes typingDot {
+        0%, 80%, 100% { transform: scale(0.8); opacity: 0.4; }
+        40% { transform: scale(1.2); opacity: 1; }
+      }
+      @keyframes float {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-15px) rotate(5deg); }
+      }
+
+      /* Reduced motion */
+      @media (prefers-reduced-motion: reduce) {
+        #loader * { animation: none !important; }
+        .loader-progress-bar { width: 100%; }
+      }
+    </style>
+  </head>
+  <body class="bg-black text-white font-['Plus_Jakarta_Sans',sans-serif] antialiased selection:bg-[#FFA800] selection:text-black">
+    <div id="loader" role="status" aria-label="Loading portfolio">
+      <div class="loader-decor loader-decor-1"></div>
+      <div class="loader-decor loader-decor-2"></div>
+      <div class="loader-decor loader-decor-3"></div>
+      <div class="loader-brand">
+        <div class="loader-brand-inner"></div>
+        <div class="loader-brand-text">SK</div>
+      </div>
+      <div class="loader-progress">
+        <div class="loader-progress-bar"></div>
+      </div>
+      <p class="loader-text">
+        Loading<span>.</span><span>.</span><span>.</span>
+      </p>
+    </div>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // Hide loader once React app is mounted
+      document.addEventListener('DOMContentLoaded', () => {
+        const hideLoader = () => {
+          const loader = document.getElementById('loader');
+          if (loader) {
+            loader.classList.add('hidden');
+            setTimeout(() => loader.remove(), 600);
+          }
+        };
+        // Check if React has mounted by looking for content in #root
+        const observer = new MutationObserver((mutations, obs) => {
+          const root = document.getElementById('root');
+          if (root && root.children.length > 0) {
+            hideLoader();
+            obs.disconnect();
+          }
+        });
+        observer.observe(document.getElementById('root'), { childList: true, subtree: true });
+        // Fallback timeout
+        setTimeout(hideLoader, 3000);
+      });
+    </script>
+  </body>
+</html>
+
