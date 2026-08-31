@@ -77,6 +77,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onDownloadCV }) => {
                   src={portraitImg}
                   alt="Sachin Kanojia UI/UX Designer & Front-End Developer"
                   referrerPolicy="no-referrer"
+                  loading="lazy"
                   className="w-full h-full object-cover object-top scale-100 transition-transform duration-500 hover:scale-105"
                 />
 

@@ -7,11 +7,18 @@ import { ExpertiseSection } from './components/ExpertiseSection';
 import { ProjectsSection } from './components/ProjectsSection';
 import { ContactSection } from './components/ContactSection';
 import { ContactModal } from './components/ContactModal';
+import { useSEO } from './hooks/useSEO';
 
 export default function App() {
   const [activeNav, setActiveNav] = useState('Home');
   const [isContactOpen, setIsContactOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true);
+
+  useSEO({
+    title: 'Sachin Kanojia - UI/UX Designer & Front-End Developer',
+    description: 'Senior UI/UX Designer & Frontend Developer with 15+ years experience. Expert in design systems, responsive interfaces, React, TypeScript, and modern frontend technologies. 250+ projects delivered across 25+ industries.',
+    url: 'https://sachinkanojia.com',
+  });
 
   // Auto-track active navigation tab based on scroll position
   useEffect(() => {
