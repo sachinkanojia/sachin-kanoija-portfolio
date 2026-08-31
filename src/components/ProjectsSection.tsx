@@ -189,10 +189,10 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
             {/* --------------------------------------------------------- */}
             {/* LEFT COLUMN: Categories Menu                             */}
             {/* --------------------------------------------------------- */}
-            <div className="w-full flex flex-col space-y-2.5 lg:sticky lg:top-24">
+            <div className="w-full flex flex-col space-y-2.5 lg:sticky lg:top-10">
               <div className="flex items-center gap-2 mb-4 px-1">
                 <span className="w-2 h-2 rounded-full bg-[#FFA800] inline-block shadow-[0_0_6px_rgba(255,168,0,0.8)]" />
-                <span className="text-xs sm:text-sm font-semibold text-neutral-400 uppercase tracking-wider">
+                <span className="text-xs sm:text-sm font-semibold text-neutral-400 tracking-wider">
                   Select Category
                 </span>
               </div>
@@ -261,8 +261,8 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
             {/* --------------------------------------------------------- */}
             <div className="w-full flex flex-col space-y-4">
               
-              {/* Header: Bullet + Featured Projects Title + Count */}
-              <div className="flex items-center justify-between px-1">
+              {/* Header: Bullet + Featured Projects Title + Count - Aligned with left sidebar */}
+              <div className="flex items-center justify-between px-1 mb-4">
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-[#FFA800] inline-block shadow-[0_0_6px_rgba(255,168,0,0.8)]" />
                   <span className="text-sm sm:text-base font-semibold text-neutral-200 tracking-wide">

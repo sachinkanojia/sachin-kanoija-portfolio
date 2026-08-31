@@ -3,23 +3,6 @@ import React from 'react';
 export const TestimonialTags: React.FC = () => {
   return (
     <div className="flex flex-col items-start lg:items-end text-left lg:text-right max-w-lg">
-      {/* Amber Double Quotes Icon */}
-      <div className="w-full flex justify-start lg:justify-end mb-2">
-        <svg
-          className="w-10 h-8 text-[#FFA800] fill-current opacity-90"
-          viewBox="0 0 24 24"
-        >
-          <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-        </svg>
-      </div>
-
-      {/* Quote / Tagline Statement */}
-      <h2 className="text-xl sm:text-2xl md:text-[28px] font-medium leading-[1.3] tracking-tight text-white mb-8">
-        Design with purpose
-        <br />
-        <span className="font-semibold">Develop with precision!</span>
-      </h2>
-
       {/* Pill Tags Matrix */}
       <div className="flex flex-col gap-3 w-full items-start lg:items-end">
         {/* Row 1: Prototype + Dashboard */}
