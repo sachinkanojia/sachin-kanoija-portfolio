@@ -60,7 +60,7 @@ export default function ShutterName({ className = "" }: ShutterNameProps) {
                   style={{
                     color: "#FFA800",
                     fontWeight: 800,
-                    fontSize: "0.7em",
+                    fontSize: "0.6em",
                     lineHeight: 1.2,
                     textShadow:
                       "0 0 30px rgba(255,168,0,0.9), 0 0 60px rgba(255,168,0,0.6), 0 2px 10px rgba(0,0,0,0.8)",
