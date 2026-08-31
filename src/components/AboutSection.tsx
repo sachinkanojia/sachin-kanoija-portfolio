@@ -192,7 +192,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onDownloadCV }) => {
             </div>
 
             {/* Bio Paragraphs */}
-            <div className="-mt-16 space-y-4 text-neutral-200 text-base sm:text-lg font-normal leading-relaxed max-w-2xl [text-shadow:0_1px_6px_rgba(0,0,0,0.8)]">
+            <div className="mt-2 sm:mt-0 -mt-12 lg:-mt-16 space-y-4 text-neutral-200 text-base sm:text-lg font-normal leading-relaxed max-w-2xl [text-shadow:0_1px_6px_rgba(0,0,0,0.8)]">
               <p>
                 I'm a Senior UI/UX Designer, Product Designer, and Frontend Developer with{' '}
                 <strong className="text-[#FFA800] font-semibold">15+ years</strong> of professional experience,

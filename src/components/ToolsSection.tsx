@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { INITIAL_TOOLS, ToolItem } from '../data/toolsData';
 
@@ -8,62 +8,77 @@ interface ToolsSectionProps {
 
 export const ToolsSection: React.FC<ToolsSectionProps> = ({ embedded = false }) => {
   const [tools] = useState<ToolItem[]>(INITIAL_TOOLS);
-  const [isHovered, setIsHovered] = useState<boolean>(false);
-
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [cardsPerView, setCardsPerView] = useState(1);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const animationFrameRef = useRef<number | null>(null);
+  const autoPlayIntervalRef = useRef<number | null>(null);
   const isPausedRef = useRef(false);
-  const pauseTimeoutRef = useRef<number | null>(null);
 
-  // Smooth auto-scroll loop (delta-time based, frame-rate independent), pauses on hover or manual nav
   useEffect(() => {
+    const updateCardsPerView = () => {
+      if (window.innerWidth < 640) {
+        setCardsPerView(1);
+      } else if (window.innerWidth < 1024) {
+        setCardsPerView(2);
+      } else {
+        setCardsPerView(3);
+      }
+    };
+    updateCardsPerView();
+    window.addEventListener('resize', updateCardsPerView);
+    return () => window.removeEventListener('resize', updateCardsPerView);
+  }, []);
+
+  const scrollToIndex = useCallback((index: number) => {
     const container = scrollContainerRef.current;
     if (!container) return;
-
-    const speed = 120; // pixels per second
-    let lastTime = performance.now();
-
-    const step = (time: number) => {
-      const dt = Math.min(50, time - lastTime);
-      lastTime = time;
-      if (!isHovered && !isPausedRef.current && container) {
-        container.scrollLeft += (speed * dt) / 1000;
-        // Seamless infinite wrap when reaching halfway through duplicated list
-        if (container.scrollLeft >= container.scrollWidth / 2) {
-          container.scrollLeft -= container.scrollWidth / 2;
-        }
-      }
-      animationFrameRef.current = requestAnimationFrame(step);
-    };
-
-    animationFrameRef.current = requestAnimationFrame(step);
-
-    return () => {
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
-      }
-      if (pauseTimeoutRef.current) {
-        window.clearTimeout(pauseTimeoutRef.current);
-      }
-    };
-  }, [isHovered]);
+    const cardWidth = container.querySelector('.tool-card')?.clientWidth || 250;
+    const gap = 20;
+    container.scrollTo({
+      left: index * (cardWidth + gap),
+      behavior: 'smooth',
+    });
+    setCurrentIndex(index);
+  }, []);
 
   const handleScroll = (direction: 'left' | 'right') => {
-    const container = scrollContainerRef.current;
-    if (!container) return;
-    // Pause autoplay so the smooth jump is not fought by the auto-scroll loop
-    isPausedRef.current = true;
-    if (pauseTimeoutRef.current) window.clearTimeout(pauseTimeoutRef.current);
-    pauseTimeoutRef.current = window.setTimeout(() => {
-      isPausedRef.current = false;
-    }, 2000);
-    const cardWidth = 250;
-    const scrollAmount = direction === 'left' ? -cardWidth * 2 : cardWidth * 2;
-    container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    const maxIndex = tools.length - cardsPerView;
+    const newIndex = direction === 'left'
+      ? Math.max(0, currentIndex - 1)
+      : Math.min(maxIndex, currentIndex + 1);
+    scrollToIndex(newIndex);
+    pauseAutoPlay();
   };
 
-  // Duplicate tools array for infinite marquee flow
-  const duplicatedTools = [...tools, ...tools];
+  const pauseAutoPlay = () => {
+    isPausedRef.current = true;
+    setIsAutoPlaying(false);
+    if (autoPlayIntervalRef.current) {
+      clearInterval(autoPlayIntervalRef.current);
+      autoPlayIntervalRef.current = null;
+    }
+  };
+
+  const resumeAutoPlay = () => {
+    if (!isAutoPlaying && !isPausedRef.current) return;
+    isPausedRef.current = false;
+    setIsAutoPlaying(true);
+    autoPlayIntervalRef.current = window.setInterval(() => {
+      const maxIndex = tools.length - cardsPerView;
+      const nextIndex = currentIndex >= maxIndex ? 0 : currentIndex + 1;
+      scrollToIndex(nextIndex);
+    }, 4000);
+  };
+
+  useEffect(() => {
+    resumeAutoPlay();
+    return () => {
+      if (autoPlayIntervalRef.current) {
+        clearInterval(autoPlayIntervalRef.current);
+      }
+    };
+  }, [currentIndex, cardsPerView, tools.length]);
 
   const content = (
     <div className="bg-black/40 backdrop-blur-md border border-neutral-800/80 rounded-3xl p-6 sm:p-10 md:p-12 shadow-[0_8px_30px_rgba(0,0,0,0.4)] relative w-full">
@@ -100,49 +115,54 @@ export const ToolsSection: React.FC<ToolsSectionProps> = ({ embedded = false }) 
       {/* Slider Viewport with Overlay Prev/Next Buttons */}
       <div
         className="relative w-full"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        onMouseEnter={pauseAutoPlay}
+        onMouseLeave={resumeAutoPlay}
+        onTouchStart={pauseAutoPlay}
+        onTouchEnd={resumeAutoPlay}
       >
-        {/* Overlay Prev Button (left edge of the thumb) */}
+        {/* Overlay Prev Button */}
         <button
           id="tool-slider-prev-btn"
           onClick={() => handleScroll('left')}
           aria-label="Previous tools"
           className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/70 hover:bg-[#FFA800] text-white hover:text-black border border-neutral-700/80 hover:border-amber-400 flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-lg cursor-pointer backdrop-blur-sm"
+          disabled={currentIndex === 0}
+          style={{ opacity: currentIndex === 0 ? 0.4 : 1, pointerEvents: currentIndex === 0 ? 'none' : 'auto' }}
         >
           <ChevronLeft className="w-5 h-5" />
         </button>
 
-        {/* Overlay Next Button (right edge of the thumb) */}
+        {/* Overlay Next Button */}
         <button
           id="tool-slider-next-btn"
           onClick={() => handleScroll('right')}
           aria-label="Next tools"
           className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/70 hover:bg-[#FFA800] text-white hover:text-black border border-neutral-700/80 hover:border-amber-400 flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-lg cursor-pointer backdrop-blur-sm"
+          disabled={currentIndex >= tools.length - cardsPerView}
+          style={{ opacity: currentIndex >= tools.length - cardsPerView ? 0.4 : 1, pointerEvents: currentIndex >= tools.length - cardsPerView ? 'none' : 'auto' }}
         >
           <ChevronRight className="w-5 h-5" />
         </button>
 
         {/* Left Vignette Fade */}
         <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-12 bg-gradient-to-r from-black/40 to-transparent z-10 pointer-events-none" />
-
         {/* Right Vignette Fade */}
         <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-12 bg-gradient-to-l from-black/40 to-transparent z-10 pointer-events-none" />
 
         {/* Scrollable Track */}
         <div
           ref={scrollContainerRef}
-          className="flex gap-4 sm:gap-5 overflow-x-auto py-2 px-2 scrollbar-none select-none scroll-smooth"
+          className="flex gap-4 sm:gap-5 overflow-x-auto py-2 px-2 scrollbar-none select-none scroll-smooth snap-x snap-mandatory"
           style={{
             scrollbarWidth: 'none',
             msOverflowStyle: 'none',
           }}
         >
-          {duplicatedTools.map((tool, idx) => (
+          {tools.map((tool, idx) => (
             <div
-              key={`${tool.id}-${idx}`}
-              id={`tool-card-${tool.id}-${idx}`}
-              className="flex-shrink-0 w-[210px] sm:w-[230px] md:w-[245px] relative bg-[#141414] border border-neutral-800/90 rounded-2xl p-5 hover:border-amber-500/50 hover:bg-[#181818] transition-all duration-300 group flex flex-col justify-between shadow-lg cursor-grab active:cursor-grabbing hover:-translate-y-1"
+              key={tool.id}
+              id={`tool-card-${tool.id}`}
+              className="tool-card flex-shrink-0 w-[210px] sm:w-[230px] md:w-[245px] relative bg-[#141414] border border-neutral-800/90 rounded-2xl p-5 hover:border-amber-500/50 hover:bg-[#181818] transition-all duration-300 group flex flex-col justify-between shadow-lg cursor-grab active:cursor-grabbing hover:-translate-y-1 snap-center"
             >
               {/* Top Row: Category + Percentage Badge */}
               <div className="flex items-center justify-between mb-3">
@@ -150,7 +170,7 @@ export const ToolsSection: React.FC<ToolsSectionProps> = ({ embedded = false }) 
                   {tool.category || 'Tool'}
                 </span>
                 <span
-                  id={`tool-badge-${tool.id}-${idx}`}
+                  id={`tool-badge-${tool.id}`}
                   className="px-2.5 py-0.5 rounded-full bg-[#1C1C1C] border border-neutral-700/60 text-neutral-300 text-xs font-semibold tracking-tight shadow-sm"
                 >
                   {tool.percentage}
@@ -182,6 +202,22 @@ export const ToolsSection: React.FC<ToolsSectionProps> = ({ embedded = false }) 
                 </div>
               </div>
             </div>
+          ))}
+        </div>
+
+        {/* Dots Indicator (Mobile only) */}
+        <div className="hidden sm:flex justify-center gap-2 mt-6">
+          {Array.from({ length: tools.length - cardsPerView + 1 }, (_, i) => (
+            <button
+              key={i}
+              onClick={() => scrollToIndex(i)}
+              className={`w-2 h-2 rounded-full transition-all ${
+                i === currentIndex
+                  ? 'bg-[#FFA800] w-6 shadow-[0_0_8px_rgba(255,168,0,0.8)]'
+                  : 'bg-neutral-700 hover:bg-neutral-500'
+              }`}
+              aria-label={`Go to slide ${i + 1}`}
+            />
           ))}
         </div>
       </div>
