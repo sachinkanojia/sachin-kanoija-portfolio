@@ -40,17 +40,36 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenContact: _onOpen
         </motion.div>
       </div>
 
-      {/* Bottom: Social Links Only - Simplified for Clear Focal Point */}
+      {/* Bottom Grid: Left (Socials + Reviews) & Right (Testimonial + Tags) */}
       <div
         id="hero-bottom-grid"
-        className="w-full flex flex-col items-center lg:items-start justify-between pt-6 sm:pt-10"
+        className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-end justify-between pt-6 sm:pt-10"
       >
-        {/* Follow Me On + Social Circles */}
-        <div className="space-y-4 w-full max-w-xs mx-auto lg:mx-0">
-          <h2 className="text-base sm:text-lg md:text-xl font-medium text-white tracking-normal text-center lg:text-left">
-            Follow Me On
-          </h2>
-          <SocialIcons />
+        {/* Bottom Left Column */}
+        <div className="flex flex-col items-start space-y-8 sm:space-y-12">
+          {/* Follow Me On + Social Circles */}
+          <div className="space-y-4">
+            <h2 className="text-base sm:text-lg md:text-xl font-medium text-white tracking-normal">
+              Follow Me On
+            </h2>
+            <SocialIcons />
+          </div>
+
+          {/* Stats / Highlights */}
+          <div id="highlights-block" className="space-y-1">
+            <div className="text-xl sm:text-2xl md:text-[26px] font-bold tracking-tight">
+              <span className="text-[#FFA800]">50+ Projects </span>
+              <span className="text-white font-semibold">Delivered</span>
+            </div>
+            <p className="text-neutral-400 text-sm sm:text-base font-normal tracking-wide">
+              Web Apps • Mobile Apps • Design Systems
+            </p>
+          </div>
+        </div>
+
+        {/* Bottom Right Column */}
+        <div className="flex justify-start lg:justify-end">
+          <TestimonialTags />
         </div>
       </div>
     </section>

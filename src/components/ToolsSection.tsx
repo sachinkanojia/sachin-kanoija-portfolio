@@ -166,7 +166,7 @@ export const ToolsSection: React.FC<ToolsSectionProps> = ({ embedded = false }) 
             >
               {/* Top Row: Category + Percentage Badge */}
               <div className="flex items-center justify-between mb-3">
-                <span className="text-xs font-medium text-neutral-400 truncate max-w-[110px]">
+                <span className="text-[11px] font-medium text-neutral-400 truncate max-w-[110px]">
                   {tool.category || 'Tool'}
                 </span>
                 <span
@@ -206,22 +206,18 @@ export const ToolsSection: React.FC<ToolsSectionProps> = ({ embedded = false }) 
         </div>
 
         {/* Dots Indicator (Mobile only) */}
-        <div className="hidden sm:flex justify-center gap-1 mt-6" role="tablist" aria-label="Tool carousel slides">
+        <div className="hidden sm:flex justify-center gap-2 mt-6">
           {Array.from({ length: tools.length - cardsPerView + 1 }, (_, i) => (
             <button
               key={i}
               onClick={() => scrollToIndex(i)}
-              role="tab"
-              aria-selected={i === currentIndex}
-              aria-label={`Go to slide ${i + 1}`}
-              className={`relative w-2 h-2 rounded-full transition-all ${
+              className={`w-2 h-2 rounded-full transition-all ${
                 i === currentIndex
-                  ? 'bg-[#FFA800] w-4 shadow-[0_0_6px_rgba(255,168,0,0.8)]'
+                  ? 'bg-[#FFA800] w-6 shadow-[0_0_8px_rgba(255,168,0,0.8)]'
                   : 'bg-neutral-700 hover:bg-neutral-500'
               }`}
-            >
-              <span className="absolute inset-[-4px]" aria-hidden="true" />
-            </button>
+              aria-label={`Go to slide ${i + 1}`}
+            />
           ))}
         </div>
       </div>

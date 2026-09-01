@@ -12,7 +12,6 @@ import {
   Github,
   Globe,
   CheckCircle2,
-  MessageSquare,
 } from 'lucide-react';
 
 export const ContactSection: React.FC = () => {
@@ -145,7 +144,7 @@ export const ContactSection: React.FC = () => {
             <div className="w-full flex flex-col space-y-2.5 lg:sticky lg:top-24">
               <div className="flex items-center gap-2 mb-4 px-1">
                 <span className="w-2 h-2 rounded-full bg-[#FFA800] inline-block shadow-[0_0_6px_rgba(255,168,0,0.8)]" />
-                <span className="text-xs sm:text-sm font-semibold text-neutral-400 tracking-wider">
+                <span className="text-xs sm:text-sm font-semibold text-neutral-400 uppercase tracking-wider">
                   Contact Information
                 </span>
               </div>
@@ -153,8 +152,7 @@ export const ContactSection: React.FC = () => {
               <div className="bg-[#0C0C0C]/95 backdrop-blur-md border border-neutral-800/90 rounded-2xl p-4 sm:p-5 shadow-xl space-y-4">
                 
                 <div className="space-y-1.5">
-                  <h3 className="text-base sm:text-lg font-bold text-white tracking-tight [text-shadow:0_1px_8px_rgba(0,0,0,0.9)] flex items-center gap-2.5">
-                    <MessageSquare className="w-5 h-5 text-[#FFA800] flex-shrink-0" aria-hidden="true" />
+                  <h3 className="text-base sm:text-lg font-bold text-white tracking-tight [text-shadow:0_1px_8px_rgba(0,0,0,0.9)]">
                     Contact Information
                   </h3>
                   <div className="w-10 h-[2px] bg-[#FFA800] rounded-full" />

@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "./styles/designTokens.css";
 
 /* Fixed scroll-animation background layers (cross-fading frames) */
 .scroll-animation-bg {
